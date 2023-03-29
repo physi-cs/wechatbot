@@ -1,7 +1,5 @@
 package gtp
 
-// package main
-
 import (
 	"bytes"
 	"encoding/json"
@@ -10,10 +8,9 @@ import (
 	"net/http"
 )
 
-// const BASEURL = "https://api.openai.com/v1/"
 const BASEURL = "http://region-41.seetacloud.com:20487/"
 
-// ChatGPTResponseBody 请求体
+// ChatGLMResponseBody 请求体
 type ChatGPTResponseBody struct {
 	Response string     `json:"response"`
 	History  [][]string `json:"history"`
@@ -21,10 +18,7 @@ type ChatGPTResponseBody struct {
 	Time     string     `json:"time"`
 }
 
-type ChoiceItem struct {
-}
-
-// ChatGPTRequestBody 响应体
+// ChatGLMRequestBody 响应体
 type ChatGLMRequestBody struct {
 	// Model            string  `json:"model"`
 	Prompt string `json:"prompt"`
@@ -33,7 +27,7 @@ type ChatGLMRequestBody struct {
 	// TopP             int     `json:"top_p"`
 	// FrequencyPenalty int     `json:"frequency_penalty"`
 	// PresencePenalty  int     `json:"presence_penalty"`
-	History []string `json:"history"`
+	History [][]string `json:"history"`
 }
 
 // Completions gtp文本模型回复
@@ -41,11 +35,17 @@ type ChatGLMRequestBody struct {
 // -H "Content-Type: application/json"
 // -H "Authorization: Bearer your chatGPT key"
 // -d '{"model": "text-davinci-003", "prompt": "give me good song", "temperature": 0, "max_tokens": 7}'
-func Completions(msg string) (string, error) {
+func Completions_with_history(msg string, history_stack *History_stack) (string, error) {
+
+	// 校验是否已超出轮数
+	err := history_stack.check_rounds()
+	if err != nil {
+		return "", err
+	}
 
 	requestBody := ChatGLMRequestBody{
 		Prompt:  msg,
-		History: []string{},
+		History: *history_stack.History,
 	}
 	requestData, err := json.Marshal(requestBody)
 
@@ -80,23 +80,27 @@ func Completions(msg string) (string, error) {
 		return "", err
 	}
 
-	// if len(gptResponseBody.Choices) > 0 {
-	// 	for _, v := range gptResponseBody.Choices {
-	// 		reply = v["text"].(string)
-	// 		break
-	// 	}
-	// }
+	*history_stack.History = gptResponseBody.History
+
+	if len(gptResponseBody.History) > 0 {
+		for _, v := range gptResponseBody.History {
+			log.Printf("gpt response history: 问%s ,答%s \n", v[0], v[1])
+			break
+		}
+	}
+
 	reply := gptResponseBody.Response
 	log.Printf("gpt response text: %s \n", reply)
 	return reply, nil
 }
 
-// func main() {
-// 	reply, err := Completions("你好")
-// 	if err != nil {
-// 		fmt.Printf("gtp request error: %v \n", err)
-// 	}
-// 	if reply != "" {
-// 		fmt.Printf(reply)
-// 	}
-// }
+func Completions(msg string) (string, error) {
+	// 读取存储的历史记录
+	// TODO 根据wx_id获取历史对话
+	history := 	HISTORY
+	history_stack := New_History_stack(history, 5)
+	reply, err := Completions_with_history(msg, history_stack)
+	return reply, err
+}
+
+

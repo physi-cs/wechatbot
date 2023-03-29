@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/869413421/wechatbot/gtp"
-	"github.com/eatmoreapple/openwechat"
 	"log"
 	"strings"
+
+	"github.com/869413421/wechatbot/gtp"
+	"github.com/eatmoreapple/openwechat"
 )
 
 var _ MessageHandlerInterface = (*GroupMessageHandler)(nil)
@@ -23,6 +24,7 @@ func (g *GroupMessageHandler) handle(msg *openwechat.Message) error {
 
 // NewGroupMessageHandler 创建群消息处理器
 func NewGroupMessageHandler() MessageHandlerInterface {
+	
 	return &GroupMessageHandler{}
 }
 

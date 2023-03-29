@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	"log"
+
 	"github.com/869413421/wechatbot/config"
 	"github.com/eatmoreapple/openwechat"
-	"log"
 )
 
 // MessageHandlerInterface 消息处理接口
