@@ -11,6 +11,9 @@ type History_stack struct {
 }
 
 
+// history 全局变量
+var HISTORY_STACK = &[][]string{{}}
+
 func New_History_stack(history *[][]string,max_boxes int) *History_stack{
 	history_stack := History_stack{
 		History: history,
