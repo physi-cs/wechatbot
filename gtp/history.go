@@ -10,13 +10,12 @@ type History_stack struct {
 	Max_boxes int
 }
 
-
 // history 全局变量
-var HISTORY_STACK = &[][]string{{}}
+var HISTORY_STACK = &[][]string{{"", ""}}
 
-func New_History_stack(history *[][]string,max_boxes int) *History_stack{
+func New_History_stack(history *[][]string, max_boxes int) *History_stack {
 	history_stack := History_stack{
-		History: history,
+		History:   history,
 		Max_boxes: max_boxes,
 	}
 	return &history_stack
@@ -39,7 +38,6 @@ func (h *History_stack) count() int {
 	return len(*h.History)
 }
 
-// TODO:使用error代替0/1
 type tooMuchRound struct {
 	msg string
 }
@@ -54,9 +52,7 @@ func New(msg string) error {
 	}
 }
 
-
 // // TODO 现以json文件存储对话历史数组，可以考虑替换为 ThreadLocal 类
-
 
 // // 默认以json文件的形式存储
 // // JsonFileHistoryStorage 实现 io.ReadWriter
