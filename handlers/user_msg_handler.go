@@ -4,7 +4,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/869413421/wechatbot/gtp"
+	"github.com/869413421/wechatbot/glm"
 	"github.com/eatmoreapple/openwechat"
 )
 
@@ -36,10 +36,15 @@ func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	// 向GPT发起请求
 	requestText := strings.TrimSpace(msg.Content)
 	requestText = strings.Trim(msg.Content, "\n")
-	reply, err := gtp.Completions(requestText)
+	reply, err := glm.Completions(requestText)
 	if err != nil {
-		log.Printf("gtp request error: %v \n", err)
-		msg.ReplyText("机器人神了，我一会发现了就去修。")
+		if tooMuchRound,ok := err.(glm.TooMuchRound);ok {
+			log.Printf("reply message: %v \n", err)
+			msg.ReplyText(tooMuchRound.GetMessage())
+			return err
+		}
+		log.Printf("glm request error: %v \n", err)
+		msg.ReplyText("机器人溜工了，我一会发现了就去修。")
 		return err
 	}
 	if reply == "" {

@@ -7,7 +7,7 @@ func main() {
 }
 
 // func main() {
-// 	_, err := gtp.Completions("他的妻子是谁")
+// 	_, err := glm.Completions("他的妻子是谁")
 // 	if err != nil {
 // 		fmt.Printf("gtp request error: %v \n", err)
 // 	}

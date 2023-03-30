@@ -1,4 +1,4 @@
-package gtp
+package glm
 
 import (
 	"fmt"
@@ -12,6 +12,7 @@ type History_stack struct {
 
 // history 全局变量
 var HISTORY_STACK = &[][]string{{"", ""}}
+var Max_boxes = 5
 
 func New_History_stack(history *[][]string, max_boxes int) *History_stack {
 	history_stack := History_stack{
@@ -23,13 +24,15 @@ func New_History_stack(history *[][]string, max_boxes int) *History_stack {
 
 func (h *History_stack) clear() {
 	// TODO之前的history空间会自行垃圾回收吗？
-	h.History = &[][]string{}
+	h.History = &[][]string{{"", ""}}
 }
 
 func (h *History_stack) check_rounds() error {
 	len := h.count()
 	if len > h.Max_boxes {
-		return New("too much round, context cleared, please try later")
+		// 删除历史
+		h.clear()
+		return NewError("too much round, context cleared, please try later")
 	}
 	return nil
 }
@@ -38,18 +41,22 @@ func (h *History_stack) count() int {
 	return len(*h.History)
 }
 
-type tooMuchRound struct {
+type TooMuchRound struct {
 	msg string
 }
 
-func (e tooMuchRound) Error() string {
+func (e TooMuchRound) Error() string {
 	return fmt.Sprintf("msg:%v", e.msg)
 }
 
-func New(msg string) error {
-	return tooMuchRound{
+func NewError(msg string) error {
+	return TooMuchRound{
 		msg: msg,
 	}
+}
+
+func (e TooMuchRound) GetMessage() string {
+	return e.msg
 }
 
 // // TODO 现以json文件存储对话历史数组，可以考虑替换为 ThreadLocal 类

@@ -1,2 +1,2 @@
-# nohup ./startup.sh
+# nohup sh startup.sh
 go run main.go
