@@ -3,6 +3,7 @@ package glm
 import (
 	"fmt"
 	"errors"
+	"time"
 )
 
 // TODO: 改造history为map，以wx_id为键
@@ -67,6 +68,30 @@ func GetHistoryStack(sender string) (*History_stack, error) {
     historyStack := New_History_stack(sender, &[][]string{}, Max_boxes)
     History_stack_slice = append(History_stack_slice, historyStack)
     return historyStack, nil
+}
+
+// 定时清空历史记录
+func ClearHistoryStackSlice() {
+	/*
+    for {
+        time.Sleep(48 * time.Hour) // 等待 48 小时
+        History_stack_slice = []*History_stack{} // 清空历史记录切片
+    }
+	*/
+	for {
+        // 计算距离下一个早上三点的时间
+        now := time.Now()
+        next := now.Add(time.Hour * 24)
+        next = time.Date(next.Year(), next.Month(), next.Day(), 3, 0, 0, 0, next.Location())
+        duration := next.Sub(now)
+
+        // 等待到下一个早上三点
+        time.Sleep(duration)
+
+        // 清空历史记录切片
+        History_stack_slice = []*History_stack{}
+		fmt.Printf("Cleared history stack slice at %s\n", time.Now().Format("2006-01-02 15:04:05"))
+    }
 }
 
 type TooMuchRound struct {

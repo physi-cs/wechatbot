@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"log"
-
+	"fmt"
 	"github.com/869413421/wechatbot/config"
 	"github.com/eatmoreapple/openwechat"
 )
@@ -40,8 +40,11 @@ func Handler(msg *openwechat.Message) {
 
 	// 好友申请
 	if msg.IsFriendAdd() {
+
 		if config.LoadConfig().AutoPass {
+
 			_, err := msg.Agree("你好我是基于清华chatGLM引擎开发的微信机器人，你可以向我提问任何问题。")
+			fmt.Println("你好.")
 			if err != nil {
 				log.Fatalf("add friend agree error : %v", err)
 				return

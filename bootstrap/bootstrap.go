@@ -2,7 +2,7 @@ package bootstrap
 
 import (
 	"log"
-	//"github.com/869413421/wechatbot/glm"
+	"github.com/869413421/wechatbot/glm"
 	"github.com/869413421/wechatbot/handlers"
 	"github.com/eatmoreapple/openwechat"
 )
@@ -27,6 +27,8 @@ func Run() {
 		return
 	}
 	//}
+	//异步执行一个定时清空历史消息的函数，周期为24小时
+	go glm.ClearHistoryStackSlice()
 	// 阻塞主goroutine, 直到发生异常或者用户主动退出
 	bot.Block()
 }
