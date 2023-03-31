@@ -2,13 +2,9 @@ package glm
 
 import (
 	"errors"
-<<<<<<< HEAD
 	"time"
-=======
 	"fmt"
-
 	"github.com/869413421/wechatbot/config"
->>>>>>> bfa986db0559ef72388551fb4044a3d12f4e9c5d
 )
 
 // TODO: 改造history为map，以wx_id为键
@@ -18,14 +14,6 @@ type History_stack struct {
 	Max_boxes      int
 }
 
-// history 全局变量
-/*
-var HISTORY_STACK = &[][]string{{"", ""}}
-
-func History_init() {
-	*HISTORY_STACK = (*HISTORY_STACK)[:0]
-}
-*/
 var Max_boxes = config.LoadConfig().Max_boxes
 var User_count = config.LoadConfig().User_count
 
@@ -42,14 +30,14 @@ func (h *History_stack) clear() {
 	*h.History = (*h.History)[:0]
 }
 
-func (h *History_stack) check_rounds() error {
+func (h *History_stack) check_rounds()  {
 	len := h.count()
 	if len > h.Max_boxes {
 		// 删除历史
 		h.clear()
-		return NewError("轮次过多，已清空上下文。请重新提问。")
+		//return NewError("轮次过多，已清空上下文。请重新提问。")
 	}
-	return nil
+	return
 }
 
 func (h *History_stack) count() int {

@@ -40,11 +40,13 @@ type ChatGLMRequestBody struct {
 func Completions_with_history(msg string, history_stack *History_stack) (string, error) {
 
 	// 校验是否已超出轮数
+	history_stack.check_rounds()
+	/*
 	err := history_stack.check_rounds()
 	if err != nil {
 		return "", err
 	}
-
+	*/
 	requestBody := ChatGLMRequestBody{
 		Prompt:  msg,
 		History: *history_stack.History,
