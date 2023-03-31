@@ -13,6 +13,12 @@ type Configuration struct {
 	ApiKey string `json:"api_key"`
 	// 自动通过好友
 	AutoPass bool `json:"auto_pass"`
+	// chatGLM后端地址
+	GLMBackend string `json:"glm_backend"`
+	// 限制对话轮数
+	Max_boxes int `json:"max_boxes"`
+	// 限制用户数量
+	User_count int `json:"user_count"`
 }
 
 var config *Configuration
