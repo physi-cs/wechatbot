@@ -1,2 +1,2 @@
-# nohup startup.sh > wxglm.log 2>&1 &
+# nohup sh startup.sh  &
 go run main.go
