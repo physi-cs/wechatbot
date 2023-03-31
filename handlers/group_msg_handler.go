@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"strings"
+
 	"github.com/869413421/wechatbot/glm"
 	"github.com/eatmoreapple/openwechat"
 )
@@ -23,7 +24,7 @@ func (g *GroupMessageHandler) handle(msg *openwechat.Message) error {
 
 // NewGroupMessageHandler 创建群消息处理器
 func NewGroupMessageHandler() MessageHandlerInterface {
-	
+
 	return &GroupMessageHandler{}
 }
 
@@ -40,12 +41,12 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 	}
 
 	// 替换掉@文本，然后向GPT发起请求
-	replaceText := "@" + sender.Self.NickName
+	replaceText := "@" + sender.NickName
 	requestText := strings.TrimSpace(strings.ReplaceAll(msg.Content, replaceText, ""))
 	//reply, err := glm.Completions(requestText)
-	reply, err := glm.Completions(group.NickName,requestText)
+	reply, err := glm.Completions(group.NickName, requestText)
 	if err != nil {
-		if tooMuchRound,ok := err.(glm.TooMuchRound);ok {
+		if tooMuchRound, ok := err.(glm.TooMuchRound); ok {
 			log.Printf("reply message: %v \n", err)
 			msg.ReplyText(tooMuchRound.GetMessage())
 			return err
