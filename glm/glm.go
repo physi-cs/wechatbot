@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-const BASEURL = "http://direct.virtaicloud.com:42553/"
+const BASEURL = "http://direct.virtaicloud.com:22207/"
 
 // ChatGLMResponseBody 请求体
 type ChatGPTResponseBody struct {
@@ -94,11 +94,15 @@ func Completions_with_history(msg string, history_stack *History_stack) (string,
 	return reply, nil
 }
 
-func Completions(msg string) (string, error) {
+func Completions(sender string, msg string) (string, error) {
 	// 读取存储的历史记录
 	// TODO 根据wx_id获取历史对话
-	history := HISTORY_STACK
-	history_stack := New_History_stack(history, Max_boxes)
-	reply, err := Completions_with_history(msg, history_stack)
+
+	history := GetHistoryStack(sender)
+	reply, err := Completions_with_history(msg, history)
+	
+	//history := HISTORY_STACK
+	//history_stack := New_History_stack(sender, history, Max_boxes)
+	//reply, err := Completions_with_history(msg, history_stack)
 	return reply, err
 }

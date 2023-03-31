@@ -6,25 +6,32 @@ import (
 
 // TODO: 改造history为map，以wx_id为键
 type History_stack struct {
-	History   *[][]string
-	Max_boxes int
+	Message_sender string
+	History        *[][]string
+	Max_boxes      int
 }
 
 // history 全局变量
+/*
 var HISTORY_STACK = &[][]string{{"", ""}}
+
+func History_init() {
+	*HISTORY_STACK = (*HISTORY_STACK)[:0]
+}
+*/
 var Max_boxes = 5
 
-func New_History_stack(history *[][]string, max_boxes int) *History_stack {
+func New_History_stack(sender string, history *[][]string, max_boxes int) *History_stack {
 	history_stack := History_stack{
-		History:   history,
-		Max_boxes: max_boxes,
+		Message_sender: sender,
+		History:        history,
+		Max_boxes:      max_boxes,
 	}
 	return &history_stack
 }
 
 func (h *History_stack) clear() {
-	// TODO之前的history空间会自行垃圾回收吗？
-	h.History = &[][]string{{"", ""}}
+	*h.History = (*h.History)[:0]
 }
 
 func (h *History_stack) check_rounds() error {
@@ -32,13 +39,29 @@ func (h *History_stack) check_rounds() error {
 	if len > h.Max_boxes {
 		// 删除历史
 		h.clear()
-		return NewError("too much round, context cleared, please try later")
+		return NewError("轮次过多，已清空上下文。请重新提问。")
 	}
 	return nil
 }
 
 func (h *History_stack) count() int {
 	return len(*h.History)
+}
+
+var History_stack_slice []*History_stack
+
+// GetHistoryStack 函数根据 Message_sender 查找历史栈，如果不存在则创建一个新的，并返回 History_stack 对象
+func GetHistoryStack(sender string) *History_stack {
+    for _, stack := range History_stack_slice {
+        if stack.Message_sender == sender {
+            return stack
+        }
+    }
+
+    // 如果历史栈不存在，则创建一个新的
+    historyStack := New_History_stack(sender, &[][]string{}, Max_boxes)
+    History_stack_slice = append(History_stack_slice, historyStack)
+    return historyStack
 }
 
 type TooMuchRound struct {
