@@ -2,6 +2,7 @@ package glm
 
 import (
 	"fmt"
+	"errors"
 )
 
 // TODO: 改造history为map，以wx_id为键
@@ -19,8 +20,8 @@ func History_init() {
 	*HISTORY_STACK = (*HISTORY_STACK)[:0]
 }
 */
-var Max_boxes = 5
-
+var Max_boxes = 10
+var User_count = 1000
 func New_History_stack(sender string, history *[][]string, max_boxes int) *History_stack {
 	history_stack := History_stack{
 		Message_sender: sender,
@@ -51,17 +52,21 @@ func (h *History_stack) count() int {
 var History_stack_slice []*History_stack
 
 // GetHistoryStack 函数根据 Message_sender 查找历史栈，如果不存在则创建一个新的，并返回 History_stack 对象
-func GetHistoryStack(sender string) *History_stack {
+func GetHistoryStack(sender string) (*History_stack, error) {
     for _, stack := range History_stack_slice {
         if stack.Message_sender == sender {
-            return stack
+            return stack, nil
         }
     }
 
+	//判断当前用户数量，控制并发数
+	if len(History_stack_slice) >= User_count {
+        return nil, errors.New("exceeded maximum number of users")
+    }
     // 如果历史栈不存在，则创建一个新的
     historyStack := New_History_stack(sender, &[][]string{}, Max_boxes)
     History_stack_slice = append(History_stack_slice, historyStack)
-    return historyStack
+    return historyStack, nil
 }
 
 type TooMuchRound struct {

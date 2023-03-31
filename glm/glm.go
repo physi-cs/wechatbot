@@ -98,9 +98,12 @@ func Completions(sender string, msg string) (string, error) {
 	// 读取存储的历史记录
 	// TODO 根据wx_id获取历史对话
 
-	history := GetHistoryStack(sender)
+	history,err := GetHistoryStack(sender)
+	if err != nil {
+		return "", err
+	}
 	reply, err := Completions_with_history(msg, history)
-	
+
 	//history := HISTORY_STACK
 	//history_stack := New_History_stack(sender, history, Max_boxes)
 	//reply, err := Completions_with_history(msg, history_stack)
