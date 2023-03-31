@@ -6,9 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/869413421/wechatbot/config"
 )
 
-const BASEURL = "http://direct.virtaicloud.com:22207/"
+var BASEURL string = config.LoadConfig().GLMBackend
 
 // ChatGLMResponseBody 请求体
 type ChatGPTResponseBody struct {

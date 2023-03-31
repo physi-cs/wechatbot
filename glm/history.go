@@ -1,9 +1,14 @@
 package glm
 
 import (
-	"fmt"
 	"errors"
+<<<<<<< HEAD
 	"time"
+=======
+	"fmt"
+
+	"github.com/869413421/wechatbot/config"
+>>>>>>> bfa986db0559ef72388551fb4044a3d12f4e9c5d
 )
 
 // TODO: 改造history为map，以wx_id为键
@@ -21,8 +26,9 @@ func History_init() {
 	*HISTORY_STACK = (*HISTORY_STACK)[:0]
 }
 */
-var Max_boxes = 10
-var User_count = 1000
+var Max_boxes = config.LoadConfig().Max_boxes
+var User_count = config.LoadConfig().User_count
+
 func New_History_stack(sender string, history *[][]string, max_boxes int) *History_stack {
 	history_stack := History_stack{
 		Message_sender: sender,
