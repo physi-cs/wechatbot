@@ -19,6 +19,9 @@ type Configuration struct {
 	Max_boxes int `json:"max_boxes"`
 	// 限制用户数量
 	User_count int `json:"user_count"`
+	// hw ak sk
+	AK string `json:"ak"`
+	SK string `json:"sk"`
 }
 
 var config *Configuration

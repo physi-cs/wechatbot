@@ -5,12 +5,15 @@ import (
 
 	"github.com/869413421/wechatbot/glm"
 	"github.com/869413421/wechatbot/handlers"
+	operate "github.com/869413421/wechatbot/health"
 	"github.com/eatmoreapple/openwechat"
 )
 
 func Run() {
 	//bot := openwechat.DefaultBot()
 	bot := openwechat.DefaultBot(openwechat.Desktop) // 桌面模式，上面登录不上的可以尝试切换这种模式
+	// 在错误处理函数中添加运维提醒
+	bot.MessageErrorHandler = operate.SyncCheckErrHandler(bot)
 	// 注册消息处理函数
 	bot.MessageHandler = handlers.Handler
 	// 注册登陆二维码回调

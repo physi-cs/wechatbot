@@ -44,6 +44,12 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 	replaceText := "@" + sender.NickName
 	requestText := strings.TrimSpace(strings.ReplaceAll(msg.Content, replaceText, ""))
 	//reply, err := glm.Completions(requestText)
+
+	// 拦截打招呼消息
+	// if ok:=isHi(requestText);ok{
+	// 	msg.ReplyText("requestText，我是兴业银行人工智能小助手金科小兴，基于清华大学GLM大模型开发")
+	// }
+
 	reply, err := glm.Completions(group.NickName, requestText)
 	if err != nil {
 		if tooMuchRound, ok := err.(glm.TooMuchRound); ok {
@@ -76,4 +82,19 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 		log.Printf("response group error: %v \n", err)
 	}
 	return err
+}
+
+func isHi(msg string) bool{
+	for _,element := range STRING_HI{
+		if msg == element{
+			return true
+		}
+	}
+	return false
+}
+
+var STRING_HI = [...]string{
+	"你好",
+	"Hi",
+	"hi",
 }

@@ -2,5 +2,7 @@
   "auto_pass": true,
   "glm_backend": "http://direct.virtaicloud.com:22207/",
   "max_boxes" : 5,
-  "user_count" : 1000
+  "user_count" : 1000,
+  "ak" : "FSFJ56QYOJBT8XOVPPFL",
+  "sk" : "RLYf7OuaSwn1c7IYVcL6ni2B0c55fuTDCKI3wIbE"
 }
