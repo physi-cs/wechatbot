@@ -7,18 +7,17 @@ import (
 	"github.com/eatmoreapple/openwechat"
 )
 
-type Ret int
 
 const (
-	ticketError         Ret = -14  // ticket error
-	logicError          Ret = -2   // logic error
-	sysError            Ret = -1   // sys error
-	paramError          Ret = 1    // param error
-	failedLoginWarn     Ret = 1100 // failed login warn
-	failedLoginCheck    Ret = 1101 // failed login check
-	cookieInvalid       Ret = 1102 // cookie invalid
-	loginEnvAbnormality Ret = 1203 // login environmental abnormality
-	optTooOften         Ret = 1205 // operate too often
+	ticketError         openwechat.Ret = -14  // ticket error
+	logicError          openwechat.Ret = -2   // logic error
+	sysError            openwechat.Ret = -1   // sys error
+	paramError          openwechat.Ret = 1    // param error
+	failedLoginWarn     openwechat.Ret = 1100 // failed login warn
+	failedLoginCheck    openwechat.Ret = 1101 // failed login check
+	cookieInvalid       openwechat.Ret = 1102 // cookie invalid
+	loginEnvAbnormality openwechat.Ret = 1203 // login environmental abnormality
+	optTooOften         openwechat.Ret = 1205 // operate too often
 )
 
 // SyncCheck错误处理函数
@@ -26,7 +25,7 @@ const (
 // 返回false将退出bot
 func SyncCheckErrHandler(bot *openwechat.Bot) func(error) bool {
 	return func(err error) bool {
-		var ret Ret
+		var ret openwechat.Ret
 		if errors.As(err, &ret) {
 			switch ret {
 			case failedLoginCheck, cookieInvalid, failedLoginWarn:
