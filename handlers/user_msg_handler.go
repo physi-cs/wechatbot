@@ -3,7 +3,9 @@ package handlers
 import (
 	"log"
 	"strings"
+
 	"github.com/869413421/wechatbot/glm"
+	operate "github.com/869413421/wechatbot/health"
 	"github.com/eatmoreapple/openwechat"
 )
 
@@ -38,12 +40,13 @@ func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	//reply, err := glm.Completions(requestText)
 	reply, err := glm.Completions(sender.NickName, requestText)
 	if err != nil {
-		if tooMuchRound,ok := err.(glm.TooMuchRound);ok {
+		if tooMuchRound, ok := err.(glm.TooMuchRound); ok {
 			log.Printf("reply message: %v \n", err)
 			msg.ReplyText(tooMuchRound.GetMessage())
 			return err
 		}
 		log.Printf("glm request error: %v \n", err)
+		operate.Create_events(err.Error())
 		msg.ReplyText("机器人故障，正在修复，请等待。")
 		return err
 	}

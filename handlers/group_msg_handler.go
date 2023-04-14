@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/869413421/wechatbot/glm"
+	operate "github.com/869413421/wechatbot/health"
 	"github.com/eatmoreapple/openwechat"
 )
 
@@ -58,6 +59,7 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 			return err
 		}
 		log.Printf("glm request error: %v \n", err)
+		operate.Create_events(err.Error())
 		msg.ReplyText("机器人故障，正在修复，请等待。")
 		return err
 	}
@@ -84,9 +86,9 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 	return err
 }
 
-func isHi(msg string) bool{
-	for _,element := range STRING_HI{
-		if msg == element{
+func isHi(msg string) bool {
+	for _, element := range STRING_HI {
+		if msg == element {
 			return true
 		}
 	}

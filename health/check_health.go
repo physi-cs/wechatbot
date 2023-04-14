@@ -7,7 +7,6 @@ import (
 	"github.com/eatmoreapple/openwechat"
 )
 
-
 const (
 	ticketError         openwechat.Ret = -14  // ticket error
 	logicError          openwechat.Ret = -2   // logic error
@@ -30,9 +29,9 @@ func SyncCheckErrHandler(bot *openwechat.Bot) func(error) bool {
 			switch ret {
 			case failedLoginCheck, cookieInvalid, failedLoginWarn:
 				_ = bot.Logout()
-				
+
 				// 添加提醒函数
-				create_events(err.Error())
+				Create_events(err.Error())
 				log.Printf("hw event msg sent")
 
 				return false
